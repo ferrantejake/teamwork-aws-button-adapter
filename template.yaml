@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Lambda function that sends an email on the click of an IoT button.
+Resources:
+  iotbuttonemail:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs4.3
+      CodeUri: .
+      Description: >-
+        An AWS Lambda function that sends an email on the click of an IoT
+        button.
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 'sns:ListSubscriptionsByTopic'
+                - 'sns:CreateTopic'
+                - 'sns:SetTopicAttributes'
+                - 'sns:Subscribe'
+                - 'sns:Publish'
+              Resource: '*'
+      Events:
+        IoTRule1:
+          Type: IoTRule
+          Properties:
+            Sql: 'TODO fill in your SQL, e.g. SELECT * FROM "topic/test"'
+      Environment:
+        Variables:
+          email: <enter value here>

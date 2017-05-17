@@ -1,0 +1,37 @@
+{
+  "name": "aws-lambda-teamwork-button-adapter",
+  "version": "1.0.0",
+  "description": "AWS lambda adapter for logging time, using Teamwork.",
+  "main": "index.js",
+  "author": "Jake Ferrante",
+  "license": "ISC",
+  "dependencies": {
+    "@types/async": "^2.0.40",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/redis": "^0.12.36",
+    "@types/request": "0.0.43",
+    "async": "^2.4.0",
+    "redis": "^2.7.1",
+    "request": "^2.81.0",
+    "teamwork-api": "0.0.46",
+    "util": "^0.10.3"
+  },
+  "devDependencies": {
+    "del": "^2.2.2",
+    "eslint": "^3.13.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "gulp": "^3.9.1",
+    "gulp-help": "^1.6.1",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-sequence": "^0.4.6",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-tslint": "^7.1.0",
+    "gulp-typescript": "^3.1.6",
+    "gulp-zip": "^3.2.0",
+    "merge2": "^1.0.3",
+    "tslint": "^4.5.1",
+    "typescript": "^2.2.1"
+  }
+}

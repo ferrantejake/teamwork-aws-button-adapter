@@ -1,0 +1,19 @@
+# common
+node_modules
+bower_components
+*~
+.tscache
+.baseDir.ts
+
+# webstorm files
+.idea
+idea-out
+*.iml
+*.ipr
+*.iws
+
+# mac things
+.DS_Store
+Archive.zip
+bin
+lib
