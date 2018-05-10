@@ -6,17 +6,18 @@
   "author": "Jake Ferrante",
   "license": "ISC",
   "dependencies": {
-    "@types/async": "^2.0.40",
-    "@types/aws-sdk": "^2.7.0",
-    "@types/redis": "^0.12.36",
-    "@types/request": "0.0.43",
     "async": "^2.4.0",
+    "moment-timezone": "^0.5.13",
     "redis": "^2.7.1",
-    "request": "^2.81.0",
-    "teamwork-api": "0.0.46",
-    "util": "^0.10.3"
+    "request": "^2.81.0"
   },
   "devDependencies": {
+    "@types/async": "^2.0.40",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/moment-timezone": "^0.2.34",
+    "@types/redis": "^0.12.36",
+    "@types/request": "0.0.43",
+    "@types/node": "^8.0.2",
     "del": "^2.2.2",
     "eslint": "^3.13.1",
     "eslint-config-standard": "^6.2.1",

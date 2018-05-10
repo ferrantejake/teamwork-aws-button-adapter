@@ -5,8 +5,9 @@
         "moduleResolution": "node",
         "noImplicitAny": true,
         "preserveConstEnums": true,
-        "removeComments": false,
-        "target": "ES6"
+        "removeComments": true,
+        "target": "ES6",
+        "inlineSourceMap": true
     },
     "filesGlob": [
         "typings/index.d.ts",

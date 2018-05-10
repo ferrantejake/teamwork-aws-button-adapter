@@ -32,6 +32,16 @@ export declare type Callback = (error?: Error, res?: any) => any;
  * http://docs.aws.amazon.com/iot/latest/developerguide/iot-lambda-rule.html
  */
 exports.handler = (event: any, context: any, callback: Callback) => {
-    console.log('Received event:', event.clickType);
-    teamwork.markTime(event, context, callback);
+    console.log('Received event:', event);
+    // callback(null, event);
+    teamwork.markTime()
+        .then(response => {
+            console.log('lambda function complete');
+            callback(null, 'done');
+        })
+        .catch(error => {
+            console.log('lambda function error');
+            console.log(error);
+            callback(undefined, error);
+        });
 };

@@ -1,6 +1,5 @@
 import * as async from 'async';
 import * as redis from 'redis';
-const debugSys = require('debug')('droplit-sys:redis');
 
 let _instance: redis.RedisClient;
 let _subscribe: redis.RedisClient;
@@ -18,17 +17,17 @@ if (!redisConfig.url) {
         const fs = require('fs');
         redisConfig = JSON.parse(fs.readFileSync('./localconfig.json', 'utf8')).redis;
     } catch (error) {
-        debugSys('No Redis connection information available');
+        console.log('No Redis connection information available');
     }
 }
 
 // initilizes the redis connection instances
-export function init(ready: () => any): void {
-    async.parallel([
-        (cb: () => void) => instance().then(() => cb()),
-        (cb: () => void) => subscribe().then(() => cb())
-    ], (err, results) => { ready(); }); // instances are ready here
-}
+// export function init(ready: () => any): void {
+//     async.parallel([
+//         (cb: () => void) => instance().then(() => cb()),
+//         (cb: () => void) => subscribe().then(() => cb())
+//     ], (err, results) => { ready(); }); // instances are ready here
+// }
 
 export function create(): Promise<redis.RedisClient> {
     return new Promise((resolve, reject) => {
@@ -37,46 +36,52 @@ export function create(): Promise<redis.RedisClient> {
         const redisClient = redis.createClient(redisConfig.port, redisConfig.url, { password: redisConfig.password });
         redisClient.auth(redisConfig.password, (error: Error, result: string) => {
             redisClient.on('error', handleError);
-            if (result === 'OK') {
-                /* authenticated */
-                debugSys(`created new client`);
+            redisClient.on('ready', () => {
+                console.log(`created new client`);
                 resolve(redisClient);
-            } else {
-                debugSys('error creating redis client');
-                debugSys(error);
+            });
+
+            if (result !== 'OK') {
+                console.log('error creating redis client');
+                console.log(error);
                 // TODO: log error
                 reject(error);
+            } else {
+                /* authenticated */
+                console.log('redis connection established');
             }
         });
     });
 }
 
 function handleError(error: Error) {
-    debugSys(`error: ${error}`);
+    console.log(`error: ${error}`);
 }
 
 export function instance(): Promise<redis.RedisClient> {
-    debugSys(`attempting to create new instance client`);
-    if (_instance) {
-        debugSys(`instance client already exists`);
-        return Promise.resolve(_instance);
-    } else {
+    return new Promise<redis.RedisClient>((resolve, reject) => {
+        console.log(`attempting to create new instance client`);
         return create().then(redisClient => {
+            console.log(`new instance client`);
             _instance = redisClient;
-            return Promise.resolve(redisClient);
+            resolve(_instance);
         }).catch(Promise.reject);
-    }
+    });
 }
 
 export function subscribe(): Promise<redis.RedisClient> {
-    debugSys(`attempting to create new subscription client`);
-    if (_subscribe) {
-        debugSys(`subscription client already exists`);
-        return Promise.resolve(_subscribe);
-    } else {
+    return new Promise<redis.RedisClient>((resolve, reject) => {
+        console.log(`attempting to create new subscription client`);
         return create().then(redisClient => {
             _subscribe = redisClient;
-            return Promise.resolve(redisClient);
+            resolve(_subscribe);
         }).catch(Promise.reject);
-    }
+    });
+}
+
+export function terminate(client: redis.RedisClient) {
+    return new Promise<void>((resolve, reject) => {
+        client.end(true);
+        resolve();
+    });
 }
