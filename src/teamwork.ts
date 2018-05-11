@@ -4,7 +4,7 @@ import * as request from 'request';
 import * as http from 'http';
 import * as url from 'url';
 import * as moment from 'moment-timezone';
-// import * as mail from './mail';
+import * as droplit from './droplit';
 
 const TEAMWORK_ACTIVITY_FLAG = process.env.TEAMWORK_ACTIVITY_FLAG;
 const TEAMWORK_TIME_FLAG = process.env.TEAMWORK_TIME_FLAG;
@@ -96,8 +96,13 @@ export function markTime(): Promise<any> {
                         (cb: (error: Error, data: any) => void) => client.set(TEAMWORK_ACTIVITY_FLAG, activityFlag, (error: Error, data: any) => cb(error, data)),
                         (cb: (error: Error, data: any) => void) => client.set(TEAMWORK_TIME_FLAG, localTime, (error: Error, data: any) => cb(error, data)),
                     ], (error: Error, results: any[]) => {
-                        if (error) reject(new Error(`Error setting Redis flags: ${JSON.stringify(error)}`));
-                        else resolve('starting new session');
+                        if (error) {
+                            reject(new Error(`Error setting Redis flags: ${JSON.stringify(error)}`));
+                        } else {
+                            droplit.turnOn()
+                                .then(() => resolve('starting new session'))
+                                .catch(reject);
+                        }
                     });
                 });
             }
@@ -162,7 +167,10 @@ export function markTime(): Promise<any> {
                                             console.log(options.json);
                                             console.log(data);
                                             console.log('session complete');
-                                            resolve(data);
+
+                                            droplit.turnOff()
+                                                .then(() => resolve(data))
+                                                .catch(reject);
                                         }
                                     });
                                 })();
